@@ -236,6 +236,13 @@ def main():
             st.write("The selected card for today is:")
             display_card_details_streamlit(selected_card, period_label='')
         # Check if a card has been selected and 'selected_card' is not empty
+
+        # storing selected card details in session state
+        st.session_state['tarot_reading_result'] = selected_card.to_dict(orient='records')[0]  
+        # Initialize `selected_card` in session state if it's not already there
+        if 'selected_card' not in st.session_state:
+            st.session_state.selected_card = pd.DataFrame()  # Initialize with an empty DataFrame  
+        
         if not st.session_state.selected_card.empty:
             card_name_str = st.session_state.selected_card['Name'].iloc[0]
             most_similar_card = get_most_similar_card(card_name_str, dff, cosine_sim)
@@ -245,8 +252,7 @@ def main():
 
 
 
-            # storing selected card details in session state
-            st.session_state['tarot_reading_result'] = selected_card.to_dict(orient='records')[0]
+
         
         card_name_str = st.text_input("Enter a card name to find a similar one:")
 
