@@ -235,10 +235,18 @@ def main():
             st.session_state.selected_card = selected_card
             st.write("The selected card for today is:")
             display_card_details_streamlit(selected_card, period_label='')
-        # Check if a card has been selected and 'selected_card' is not empty
+            # Get similiar card
+            card_name_str = st.session_state.selected_card['Name'].iloc[0]
+            most_similar_card = get_most_similar_card(card_name_str, dff, cosine_sim)
+            st.write("\nThe most similar card is:")
+            display_card_details_streamlit(most_similar_card)
 
-        # storing selected card details in session state
-        st.session_state['tarot_reading_result'] = selected_card.to_dict(orient='records')[0]  
+            
+
+            # storing selected card details in session state
+            st.session_state['tarot_reading_result'] = selected_card.to_dict(orient='records')[0]  
+
+        
 
 
 
