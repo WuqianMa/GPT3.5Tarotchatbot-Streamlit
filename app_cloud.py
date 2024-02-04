@@ -239,27 +239,12 @@ def main():
 
         # storing selected card details in session state
         st.session_state['tarot_reading_result'] = selected_card.to_dict(orient='records')[0]  
-        # Initialize `selected_card` in session state if it's not already there
-        if 'selected_card' not in st.session_state:
-            st.session_state.selected_card = pd.DataFrame()  # Initialize with an empty DataFrame  
-        
-        if not st.session_state.selected_card.empty:
-            card_name_str = st.session_state.selected_card['Name'].iloc[0]
-            most_similar_card = get_most_similar_card(card_name_str, dff, cosine_sim)
-            st.write("\nThe most similar card is:")
-            display_card_details_streamlit(most_similar_card)
 
 
 
 
 
-        
-        card_name_str = st.text_input("Enter a card name to find a similar one:")
-
-        if st.button("Find Similar Card"):
-            most_similar_card = get_most_similar_card(card_name_str, dff, cosine_sim)
-            st.write("\nThe most similar card is:")
-            display_card_details_streamlit(most_similar_card)       
+     
 
     
     elif app_mode == "ChatGPT-like Interaction":
