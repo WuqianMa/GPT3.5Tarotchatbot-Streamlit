@@ -72,16 +72,18 @@ def display_card_details_streamlit(card, period_label=''):
         st.subheader(period_label)
     
     # Handling text fields that might be lists or strings
+    name=card['Name'].iloc[0]
+    Suit=card['Suit'].iloc[0]
     fortune_telling = '; '.join(card['Fortune Telling']) if isinstance(card['Fortune Telling'].iloc[0], list) else card['Fortune Telling'].iloc[0]
     keywords = '; '.join(card['Keywords']) if isinstance(card['Keywords'].iloc[0], list) else card['Keywords'].iloc[0]
     meanings_light = '; '.join(card['Meanings Light']) if isinstance(card['Meanings Light'].iloc[0], list) else card['Meanings Light'].iloc[0]
     meanings_shadow = '; '.join(card['Meanings Shadow']) if isinstance(card['Meanings Shadow'].iloc[0], list) else card['Meanings Shadow'].iloc[0]
     questions_to_ask = '; '.join(card['Questions to Ask']) if isinstance(card['Questions to Ask'].iloc[0], list) else card['Questions to Ask'].iloc[0]
 
-    st.write(f"**Name:** {fortune_telling}")
-    st.write(f"**Suit:** {keywords}")
-    st.write(f"**Fortune Telling:** {meanings_light}")
-    st.write(f"**Keywords:** {meanings_shadow}")
+    st.write(f"**Name:** {name}")
+    st.write(f"**Suit:** {Suit}")
+    st.write(f"**Fortune Telling:** {fortune_telling}")
+    st.write(f"**Keywords:** {keywords}")
     st.write(f"**Meanings Light:** {meanings_light}")
     st.write(f"**Meanings Shadow:** {meanings_shadow}")
     st.write(f"**Questions to Ask:** {questions_to_ask}")
@@ -233,18 +235,25 @@ def main():
             st.session_state.selected_card = selected_card
             st.write("The selected card for today is:")
             display_card_details_streamlit(selected_card, period_label='')
+        # Check if a card has been selected and 'selected_card' is not empty
+        if not st.session_state.selected_card.empty:
+            card_name_str = st.session_state.selected_card['Name'].iloc[0]
+            most_similar_card = get_most_similar_card(card_name_str, dff, cosine_sim)
+            st.write("\nThe most similar card is:")
+            display_card_details_streamlit(most_similar_card)
+
+
+
 
             # storing selected card details in session state
             st.session_state['tarot_reading_result'] = selected_card.to_dict(orient='records')[0]
         
         card_name_str = st.text_input("Enter a card name to find a similar one:")
-        if card_name_str:
-            try:
-                most_similar_card = get_most_similar_card(card_name_str, dff, cosine_sim)
-                st.write("The most similar card is:")
-                display_card_details_streamlit(most_similar_card, period_label='')
-            except IndexError:
-                st.write("Card not found. Please enter a valid card name.")
+
+        if st.button("Find Similar Card"):
+            most_similar_card = get_most_similar_card(card_name_str, dff, cosine_sim)
+            st.write("\nThe most similar card is:")
+            display_card_details_streamlit(most_similar_card)       
 
     
     elif app_mode == "ChatGPT-like Interaction":
