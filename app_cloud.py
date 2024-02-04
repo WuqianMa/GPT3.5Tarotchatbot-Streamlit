@@ -93,7 +93,11 @@ def display_card_details_streamlit(card, period_label=''):
 # ChatGPT-like Interaction Functionality
 
 def chat_interface():
-    client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+    # for local testinf
+    #client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+    # for streamlit cloud deployment
+    client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+
     st.title("Talk about your day with gpt3.5-turbo!")
 
     if "openai_model" not in st.session_state:
