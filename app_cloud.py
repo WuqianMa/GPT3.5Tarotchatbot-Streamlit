@@ -9,6 +9,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import random
 from nltk.sentiment.vader import SentimentIntensityAnalyzer  # Import the SentimentIntensityAnalyzer
+import nltk
 
 # Tarot Card Functionality
 
@@ -340,6 +341,7 @@ def main():
     file_path = 'tarot-images.json'
     data = load_tarot_data(file_path)
     dff = preprocess_data(data)
+    nltk.downloader.download('vader_lexicon')
 
     # Tarot Card Reader Mode
     if app_mode == "Tarot Card Reader":
